@@ -9,11 +9,11 @@ namespace WaterResort.Models
     public class Room
     {
         public int Id { get; set; }
-        public int AccountId { get; set; }
+        public string AccountId { get; set; }
         [Required]
-        public int QueenBeds { get; set; }
+        public bool QueenBeds { get; set; }
         [Required]
-        public int KingBeds { get; set; }
+        public bool KingBeds { get; set; }
         [Required]
         public bool Reserved { get; set; }
         [Required]
