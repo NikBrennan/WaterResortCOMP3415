@@ -230,9 +230,7 @@ namespace WaterResort.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("Reserved")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -246,25 +244,23 @@ namespace WaterResort.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Cleaned")
                         .HasColumnType("bit");
 
-                    b.Property<int>("KingBeds")
-                        .HasColumnType("int");
+                    b.Property<bool>("KingBeds")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LakeFacing")
                         .HasColumnType("bit");
 
-                    b.Property<int>("QueenBeds")
-                        .HasColumnType("int");
+                    b.Property<bool>("QueenBeds")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("Reserved")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<bool>("Suite")
                         .HasColumnType("bit");

@@ -149,5 +149,46 @@ namespace WaterResort.Controllers
         {
             return _context.Rooms.Any(e => e.Id == id);
         }
+
+        public async Task<ActionResult> Click(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var room = await _context.Rooms.FirstOrDefaultAsync(m => m.Id == id);
+
+            TempData["RoomNumber"] = room.RoomNumber;
+            TempData["CostPerNight"] = "$" + room.CostPerNight.ToString();
+
+            if(room.LakeFacing == true)
+            {
+                TempData["LakeFacing"] = "Yes.";
+            }
+            else
+            {
+                TempData["LakeFacing"] = "No.";
+            }
+
+            if(room.QueenBeds == true)
+            {
+                TempData["Beds"] = "Two queen beds.";
+            }
+            else
+            {
+                TempData["Beds"] = "One king bed.";
+            }
+
+            if(room.Suite == true)
+            {
+                TempData["RoomType"] = "Suite";
+            }
+            else
+            {
+                TempData["RoomType"] = "Standard";
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -22,5 +22,7 @@ namespace WaterResort.Models
         public bool LakeFacing { get; set; }
         [Required]
         public bool Suite { get; set; }
+        public int RoomNumber { get; set; }
+        public decimal CostPerNight { get; set; }
     }
 }

@@ -1,72 +1,70 @@
 ﻿@model IEnumerable<WaterResort.Models.Room>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Reserve a Room!";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<h1 class="text-center">Pick a room to get more details!</h1>
+<div class="row">
+    <div class="col-6">
+        <div class="container float-left">
+            <p>
+                Floor 1
+            </p>
+            <div class="row">
+                @{
+                    int i = 0;              // Room number counter
+                    int floorNum = 1;       // Floor counter
+                }
+                @foreach (var item in Model)
+                {
+                <div class="col-1">
+                    @{
+                        if (item.Reserved == true)
+                        {
+                            <button type="button" class="btn btn-danger" disabled></button>
+                        }
+                        else
+                        {
+                            <form>
+                                <button type="submit" class="btn btn-primary" asp-action="Click" asp-route-id="@item.Id"></button>
+                            </form>
+                        }
+                    }
+                </div>
+                    i++;                // Increase room number counter
+                    if (i == 24)        // Last room on floor ends with 24
+                    {
+                        floorNum++;     // Increase the floor number count
+                        FloorNumberHeader(floorNum);
+                        i = 0;          // Reset the counter
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <h3 class="text-center">ROOM DETAILS</h3>
+        <h5>Room Number: @TempData["RoomNumber"]</h5>
+        <h5>Beds: @TempData["Beds"]</h5>
+        <h5>Does this room face the lake?: @TempData["LakeFacing"]</h5>
+        <h5>Room type: @TempData["RoomType"]</h5>
+        <h5>Cost per night: @TempData["CostPerNight"]</h5>
+    </div>
+</div>
+@{
+    void FloorNumberHeader(int floorNum)
+    {
+        if (floorNum <= 5)              // There is no floor above 5
+        {
+            <div class="col-12">
+                <p>
+                    Floor @floorNum
+                </p>
+            </div>
+        }
+    }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.AccountId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.QueenBeds)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.KingBeds)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reserved)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cleaned)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LakeFacing)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Suite)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QueenBeds)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.KingBeds)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reserved)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cleaned)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LakeFacing)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Suite)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
 }
-    </tbody>
-</table>
+
