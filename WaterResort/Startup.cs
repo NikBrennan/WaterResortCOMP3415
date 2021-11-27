@@ -43,6 +43,9 @@ namespace WaterResort
         {
             app.UseDeveloperExceptionPage();
             app.UseMigrationsEndPoint();
+
+            app.UseDatabaseErrorPage();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
