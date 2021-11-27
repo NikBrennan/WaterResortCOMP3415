@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using WaterResort.Models
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
@@ -10,7 +11,7 @@
     </li>
     <li class="nav-item">
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            <button  type="submit" class="nav-link btn" style="color: azure;">Logout</button>
         </form>
     </li>
 }

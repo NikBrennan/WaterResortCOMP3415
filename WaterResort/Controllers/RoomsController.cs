@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using WaterResort.Models;
 
 namespace WaterResort.Controllers
 {
+    [Authorize(Roles = "Administratory")]
     public class RoomsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,6 +21,7 @@ namespace WaterResort.Controllers
             _context = context;
         }
 
+        [AllowAnonymous]
         // GET: Rooms
         public async Task<IActionResult> Index()
         {
@@ -150,6 +153,7 @@ namespace WaterResort.Controllers
             return _context.Rooms.Any(e => e.Id == id);
         }
 
+        [AllowAnonymous]
         public async Task<ActionResult> Click(int? id)
         {
             if (id == null)
@@ -187,6 +191,18 @@ namespace WaterResort.Controllers
             else
             {
                 TempData["RoomType"] = "Standard";
+            }
+
+            //This statement can only be ran if an administrator has selected a reserved room
+            if(room.Reserved == true)
+            {
+                var customerId = room.AccountId;
+                var customer = await _context.Users.FirstOrDefaultAsync(m => m.Id == customerId);
+                TempData[""] = "";
+                TempData[""] = "";
+                TempData[""] = "";
+                TempData[""] = "";
+
             }
             return RedirectToAction("Index");
         }

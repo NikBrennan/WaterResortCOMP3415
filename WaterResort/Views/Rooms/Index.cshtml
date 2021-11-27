@@ -22,7 +22,16 @@
                     @{
                         if (item.Reserved == true)
                         {
-                            <button type="button" class="btn btn-danger" disabled></button>
+                            if (User.IsInRole("Administrator"))
+                            {
+                                <form>
+                                    <button type="submit" class="btn btn-danger" asp-action="Click" asp-route-id="@item.Id"></button>
+                                </form>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-danger" disabled></button>
+                            }
                         }
                         else
                         {
@@ -44,14 +53,32 @@
         </div>
     </div>
     <div class="col-6">
-        <h3 class="text-center">ROOM DETAILS</h3>
-        <h5>Room Number: @TempData["RoomNumber"]</h5>
-        <h5>Beds: @TempData["Beds"]</h5>
-        <h5>Does this room face the lake?: @TempData["LakeFacing"]</h5>
-        <h5>Room type: @TempData["RoomType"]</h5>
-        <h5>Cost per night: @TempData["CostPerNight"]</h5>
-        <h5>Customer Details</h5>
+        <div class="border border-dark rounded" style="overflow: hidden;">
+            <h3 class="text-center">ROOM DETAILS</h3>
+            <h5>Room Number: @TempData["RoomNumber"]</h5>
+            <h5>Beds: @TempData["Beds"]</h5>
+            <h5>Does this room face the lake?: @TempData["LakeFacing"]</h5>
+            <h5>Room type: @TempData["RoomType"]</h5>
+            <h5>Cost per night: @TempData["CostPerNight"]</h5>
+            <form>
+                <button type="submit" class="btn btn-primary float-right">Reserve Now!</button>
+            </form>
+        </div>
+
+        @if (User.IsInRole("Administrator"))
+        {
+            <div class="border border-dark rounded">
+                <h3 class="text-center">CUSTOMER DETAILS</h3>
+                <h5>Room Number: @TempData["RoomNumber"]</h5>
+                <h5>Beds: @TempData["Beds"]</h5>
+                <h5>Does this room face the lake?: @TempData["LakeFacing"]</h5>
+                <h5>Room type: @TempData["RoomType"]</h5>
+                <h5>Cost per night: @TempData["CostPerNight"]</h5>
+            </div>
+        }
+
     </div>
+
 </div>
 @{
     void FloorNumberHeader(int floorNum)
