@@ -6,36 +6,44 @@
 }
 <h1 class="text-center">Pick a room to get more details!</h1>
 <div class="row">
-    <div class="col-7">
-        <div>
-            <p>Floor 1</p>
-            @{
-                int i = 0;              // Room number counter
-                int floorNum = 1;       // Floor counter
-            }
-            @foreach (var item in Model)
-            {
-                <form class="btn-group">
-                    @if (item.Reserved == true)
-                    {
-                    <button type="button" class="btn btn-danger m-1" disabled>@item.RoomNumber</button>
-                    }
-                    else
-                    {
-                    <button type="submit" class="btn btn-primary m-1" asp-action="Click" asp-route-id="@item.Id">@item.RoomNumber</button>
-                    }
-                </form>
-                i++;                // Increase room number counter
-                if (i == 24)        // Last room on floor ends with 24
-                {
-                    floorNum++;     // Increase the floor number count
-                    FloorNumberHeader(floorNum);
-                    i = 0;          // Reset the counter
+    <div class="col-6">
+        <div class="container float-left">
+            <p>
+                Floor 1
+            </p>
+            <div class="row">
+                @{
+                    int i = 0;              // Room number counter
+                    int floorNum = 1;       // Floor counter
                 }
-            }
+                @foreach (var item in Model)
+                {
+                <div class="col-1">
+                    @{
+                        if (item.Reserved == true)
+                        {
+                            <button type="button" class="btn btn-danger" disabled></button>
+                        }
+                        else
+                        {
+                            <form>
+                                <button type="submit" class="btn btn-primary" asp-action="Click" asp-route-id="@item.Id"></button>
+                            </form>
+                        }
+                    }
+                </div>
+                    i++;                // Increase room number counter
+                    if (i == 24)        // Last room on floor ends with 24
+                    {
+                        floorNum++;     // Increase the floor number count
+                        FloorNumberHeader(floorNum);
+                        i = 0;          // Reset the counter
+                    }
+                }
+            </div>
         </div>
     </div>
-    <div class="col-5">
+    <div class="col-6">
         <h3 class="text-center">ROOM DETAILS</h3>
         <h5>Room Number: @TempData["RoomNumber"]</h5>
         <h5>Beds: @TempData["Beds"]</h5>
