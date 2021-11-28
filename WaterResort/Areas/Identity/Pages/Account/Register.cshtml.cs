@@ -57,8 +57,8 @@ namespace WaterResort.Areas.Identity.Pages.Account
             public string FullName { get; set; }
 
             [Required]
-            [DataType(DataType.PhoneNumber)]
-            [Display(Name = "PhoneNumber")]
+            [DataType(DataType.Text)]
+            [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
 
             [Required]

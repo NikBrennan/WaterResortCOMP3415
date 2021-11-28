@@ -69,7 +69,7 @@ namespace WaterResort.Controllers
         [Authorize(Roles = "Administrator, Customer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AccountId,StartDate,EndDate")] CurrentReservation currentReservation)
+        public async Task<IActionResult> Create([Bind("Id,AccountId,StartDate,EndDate")] CurrentReservation currentReservation, string phoneNumber, string fullName)
         {
             if (ModelState.IsValid)
             {

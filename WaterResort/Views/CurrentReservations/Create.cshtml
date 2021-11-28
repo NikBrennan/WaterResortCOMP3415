@@ -1,5 +1,5 @@
 ﻿@model WaterResort.Models.CurrentReservation
-@using System.Security.Claims; 
+@using System.Security.Claims;
 
 @{
     ViewData["Title"] = "Create";
@@ -12,15 +12,16 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-         
-            @if (User.IsInRole("Administrator")) 
-            { 
+
+            @if (User.IsInRole("Administrator"))
+            {
                 <div class="form-group">
                     <label asp-for="AccountId" class="control-label"></label>
-                    <input asp-for="AccountId" class="form-control"/>
+                    <input asp-for="AccountId" class="form-control" />
                     <span asp-validation-for="AccountId" class="text-danger"></span>
                 </div>
-            } else
+            }
+            else
             {
                 <div class="form-group" hidden>
                     <label asp-for="AccountId" class="control-label"></label>
@@ -44,10 +45,12 @@
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@if (User.IsInRole("Administrator"))
+{
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
