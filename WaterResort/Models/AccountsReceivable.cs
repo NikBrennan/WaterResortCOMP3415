@@ -6,18 +6,12 @@ using System.Threading.Tasks;
 
 namespace WaterResort.Models
 {
-    public class CurrentReservation
+    public class AccountsReceivable
     {
         public int Id { get; set; }
         [Required]
         public string AccountId { get; set; }
         [Required]
-        public DateTime StartDate { get; set; }
-        [Required]
-        public DateTime EndDate { get; set; }
-        [Required]
-        public decimal TotalCost { get; set; }
-        [Required]
-        public int RoomId { get; set; }
+        public decimal Balance { get; set; }
     }
 }

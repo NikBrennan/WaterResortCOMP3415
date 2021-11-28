@@ -70,11 +70,25 @@ namespace WaterResort.Controllers
         [Authorize(Roles = "Administrator, Customer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AccountId,StartDate,EndDate")] CurrentReservation currentReservation, string phoneNumber, string fullName)
+        public async Task<IActionResult> Create([Bind("AccountId,StartDate,EndDate,TotalCost,RoomId")] CurrentReservation currentReservation)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(currentReservation);
+                var AR = await _context.AccountsReceivables.FirstOrDefaultAsync(m => m.AccountId == currentReservation.AccountId) as AccountsReceivable;
+                //Check if the user already has a standing balance.
+                if(AR != null)
+                {
+                    AR.Balance = AR.Balance + currentReservation.TotalCost;
+                }
+                else
+                {
+                    AccountsReceivable accountsReceivable = new AccountsReceivable();
+                    accountsReceivable.AccountId = currentReservation.AccountId;
+                    accountsReceivable.Balance = currentReservation.TotalCost;
+                    _context.AccountsReceivables.Add(accountsReceivable);
+                }
+                
                 await _context.SaveChangesAsync();
                 if (User.IsInRole("Administrator"))
                 {
@@ -113,19 +127,28 @@ namespace WaterResort.Controllers
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,AccountId,StartDate,EndDate")] CurrentReservation currentReservation)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,AccountId,StartDate,EndDate,TotalCost,RoomId")] CurrentReservation currentReservation)
         {
             if (id != currentReservation.Id)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(currentReservation);
-                    await _context.SaveChangesAsync();
+                    await DeleteConfirmed(id);
+
+                    var room = await _context.Rooms.FirstOrDefaultAsync(m => m.Id == currentReservation.RoomId);
+
+                    CurrentReservation cr = new CurrentReservation();
+                    cr.AccountId = currentReservation.AccountId;
+                    cr.StartDate = currentReservation.StartDate;
+                    cr.EndDate = currentReservation.EndDate;
+                    cr.TotalCost = (decimal)(currentReservation.EndDate - currentReservation.StartDate).TotalDays * room.CostPerNight;
+                    cr.RoomId = currentReservation.RoomId;
+                    await Create(cr);
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -168,9 +191,21 @@ namespace WaterResort.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+
             var currentReservation = await _context.CurrentReservations.FindAsync(id);
+
+            var room = await _context.Rooms.FirstOrDefaultAsync(m => m.Id == currentReservation.RoomId);
+            //Update the balance in the accounts receivables
+            var AR = await _context.AccountsReceivables.FirstOrDefaultAsync(m =>
+                m.AccountId == currentReservation.AccountId) as AccountsReceivable;
+            var totalDays = (currentReservation.EndDate - currentReservation.StartDate).TotalDays;
+            var totalCost = (decimal)totalDays * room.CostPerNight;
+            AR.Balance = AR.Balance - totalCost;
+
             _context.CurrentReservations.Remove(currentReservation);
             await _context.SaveChangesAsync();
+
+            
             return RedirectToAction(nameof(Index));
         }
 

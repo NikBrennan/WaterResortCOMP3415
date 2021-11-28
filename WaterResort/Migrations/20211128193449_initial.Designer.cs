@@ -7,18 +7,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WaterResort.Data;
 
-namespace WaterResort.Data.Migrations
+namespace WaterResort.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211101011033_CreateInitialTables")]
-    partial class CreateInitialTables
+    [Migration("20211128193449_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.11")
+                .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -221,6 +221,50 @@ namespace WaterResort.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WaterResort.Models.AccountsReceivable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(8,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AccountsReceivables");
+                });
+
+            modelBuilder.Entity("WaterResort.Models.CurrentReservation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("TotalCost")
+                        .HasColumnType("decimal(8,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CurrentReservations");
+                });
+
             modelBuilder.Entity("WaterResort.Models.RestaurantTable", b =>
                 {
                     b.Property<int>("Id")
@@ -246,23 +290,29 @@ namespace WaterResort.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Cleaned")
                         .HasColumnType("bit");
 
-                    b.Property<int>("KingBeds")
-                        .HasColumnType("int");
+                    b.Property<decimal>("CostPerNight")
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<bool>("KingBeds")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LakeFacing")
                         .HasColumnType("bit");
 
-                    b.Property<int>("QueenBeds")
-                        .HasColumnType("int");
+                    b.Property<bool>("QueenBeds")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("Reserved")
                         .HasColumnType("bit");
+
+                    b.Property<int>("RoomNumber")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Suite")
                         .HasColumnType("bit");
