@@ -252,7 +252,7 @@ namespace WaterResort.Controllers
             {
                 TempData["RoomType"] = "Standard";
             }
-            TempData["RoomId"] = room.Id;
+            TempData["Id"] = room.Id;
 
             //This statement can only be ran if an administrator has selected a reserved room
             if(room.Reserved == true)

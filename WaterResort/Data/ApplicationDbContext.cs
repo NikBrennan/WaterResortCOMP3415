@@ -23,6 +23,6 @@ namespace WaterResort.Data
         {
         }
 
-        public DbSet<WaterResort.Models.CurrentReservation> CurrentReservation { get; set; }
+        public DbSet<WaterResort.Models.CurrentReservation> CurrentReservations { get; set; }
     }
 }
