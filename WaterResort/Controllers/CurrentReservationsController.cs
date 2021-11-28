@@ -58,8 +58,9 @@ namespace WaterResort.Controllers
 
         // GET: CurrentReservations/Create
         [Authorize(Roles = "Administrator, Customer")]
-        public IActionResult Create(int? id)
+        public async Task<IActionResult> Create(int? id)
         {
+            ViewData["Room"] = await _context.Rooms.FirstOrDefaultAsync(m => m.Id == id);
             return View();
         }
 
