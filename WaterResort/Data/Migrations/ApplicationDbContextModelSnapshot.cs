@@ -16,7 +16,7 @@ namespace WaterResort.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.11")
+                .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -250,6 +250,12 @@ namespace WaterResort.Data.Migrations
                     b.Property<bool>("Cleaned")
                         .HasColumnType("bit");
 
+                    b.Property<decimal>("CostPerNight")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("KingBeds")
                         .HasColumnType("bit");
 
@@ -261,6 +267,12 @@ namespace WaterResort.Data.Migrations
 
                     b.Property<bool>("Reserved")
                         .HasColumnType("bit");
+
+                    b.Property<int>("RoomNumber")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("Suite")
                         .HasColumnType("bit");

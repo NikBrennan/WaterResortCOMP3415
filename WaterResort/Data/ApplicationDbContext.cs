@@ -22,5 +22,7 @@ namespace WaterResort.Data
             : base(options)
         {
         }
+
+        public DbSet<WaterResort.Models.CurrentReservation> CurrentReservation { get; set; }
     }
 }

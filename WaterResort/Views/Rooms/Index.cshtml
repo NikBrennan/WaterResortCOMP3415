@@ -60,9 +60,7 @@
             <h5>Does this room face the lake?: @TempData["LakeFacing"]</h5>
             <h5>Room type: @TempData["RoomType"]</h5>
             <h5>Cost per night: @TempData["CostPerNight"]</h5>
-            <form>
-                <button type="submit" class="btn btn-primary float-right">Reserve Now!</button>
-            </form>
+            <a class="btn btn-primary float-right" asp-controller="CurrentReservation" asp-action="Create" asp-route-id="@TempData["RoomId"]">Reserve Now!</a>
         </div>
 
         @if (User.IsInRole("Administrator"))
