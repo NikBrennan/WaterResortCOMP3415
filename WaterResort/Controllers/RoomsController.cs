@@ -259,8 +259,11 @@ namespace WaterResort.Controllers
             {
                 var customerId = room.AccountId;
                 var customer = await _context.Users.FirstOrDefaultAsync(m => m.Id == customerId);
+                var currentRes = await _context.CurrentReservations.FirstOrDefaultAsync(m => m.RoomId == room.Id);
+
                 TempData["PhoneNumber"] = customer.PhoneNumber;
                 TempData["Email"] = customer.Email;
+                TempData["ResId"] = currentRes.Id;
 
             }
             return RedirectToAction("Index");

@@ -229,6 +229,12 @@ namespace WaterResort.Controllers
             var totalCost = (decimal)totalDays * room.CostPerNight;
             AR.Balance = AR.Balance - totalCost;
 
+            //Remove reservation status of room if exists
+            if(room.Reserved == true)
+            {
+                room.Reserved = false;
+            }
+
             _context.CurrentReservations.Remove(currentReservation);
             await _context.SaveChangesAsync();
 
