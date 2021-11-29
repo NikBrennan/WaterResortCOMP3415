@@ -34,6 +34,8 @@ namespace WaterResort.Data
         {
         }
 
+        public DbSet<WaterResort.Models.RestaurantTableReservation> RestaurantTableReservation { get; set; }
+
         
     }
 }

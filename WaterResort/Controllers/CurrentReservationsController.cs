@@ -77,7 +77,9 @@ namespace WaterResort.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(currentReservation);
+
                 var AR = await _context.AccountsReceivables.FirstOrDefaultAsync(m => m.AccountId == currentReservation.AccountId) as AccountsReceivable;
+
                 //Check if the user already has a standing balance.
                 if(AR != null)
                 {
@@ -91,6 +93,15 @@ namespace WaterResort.Controllers
                     _context.AccountsReceivables.Add(accountsReceivable);
                 }
                 
+                //Check if the reservation starting date is today
+                if (currentReservation.StartDate == DateTime.Today)
+                {
+                    var room = await _context.Rooms.FirstOrDefaultAsync(m => m.Id == currentReservation.RoomId);
+                    room.Reserved = true;
+                    room.AccountId = currentReservation.AccountId;
+                }
+
+
                 await _context.SaveChangesAsync();
                 if (User.IsInRole("Administrator"))
                 {
@@ -114,10 +125,11 @@ namespace WaterResort.Controllers
             {
                 return NotFound();
             }
-
-            ViewData["Room"] = await _context.Rooms.FirstOrDefaultAsync(m => m.Id == id);
-
             var currentReservation = await _context.CurrentReservations.FindAsync(id);
+
+            ViewData["Room"] = await _context.Rooms.FirstOrDefaultAsync(m => m.Id == currentReservation.RoomId);
+
+            
             if (currentReservation == null)
             {
                 return NotFound();
@@ -151,6 +163,17 @@ namespace WaterResort.Controllers
                     cr.EndDate = currentReservation.EndDate;
                     cr.TotalCost = (decimal)(currentReservation.EndDate - currentReservation.StartDate).TotalDays * room.CostPerNight;
                     cr.RoomId = currentReservation.RoomId;
+
+                    if(cr.StartDate <= DateTime.Today && cr.EndDate >= DateTime.Today)
+                    {
+                        room.Reserved = true;
+                        room.AccountId = currentReservation.AccountId;
+                    } else
+                    {
+                        room.Reserved = false;
+                        room.AccountId = null;
+                    }
+
                     await Create(cr);
 
                 }
