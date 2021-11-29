@@ -1,35 +1,46 @@
 ﻿@model IEnumerable<WaterResort.Models.CurrentReservation>
-
+@using Microsoft.AspNetCore.Identity;
+@using WaterResort.Data;
 @{
     ViewData["Title"] = "Index";
+    UserManager<IdentityUser> users = ViewData["Users"] as UserManager<IdentityUser>;
+    ApplicationDbContext _context = ViewData["_context"] as ApplicationDbContext;
 }
 
 <h1>Index</h1>
 
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.AccountId)
+                Room Number
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartDate)
+                Email
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndDate)
+                Starting Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TotalCost)
+                Ending Date
+            </th>
+            <th>
+                Balance Due
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
+    var user = await users.FindByIdAsync(item.AccountId);
+    var room = _context.Rooms.FirstOrDefault(m => m.Id == item.RoomId);
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.AccountId)
+                @room.RoomNumber
             </td>
+            <td>
+                @user.Email
+            </td>  
             <td>
                 @Html.DisplayFor(modelItem => item.StartDate)
             </td>

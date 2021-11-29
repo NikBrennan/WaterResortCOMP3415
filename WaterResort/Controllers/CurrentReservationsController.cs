@@ -28,6 +28,8 @@ namespace WaterResort.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index()
         {
+            ViewData["Users"] = _userManager;
+            ViewData["_context"] =  _context;
             return View(await _context.CurrentReservations.ToListAsync());
         }
 
@@ -112,6 +114,8 @@ namespace WaterResort.Controllers
             {
                 return NotFound();
             }
+
+            ViewData["Room"] = await _context.Rooms.FirstOrDefaultAsync(m => m.Id == id);
 
             var currentReservation = await _context.CurrentReservations.FindAsync(id);
             if (currentReservation == null)

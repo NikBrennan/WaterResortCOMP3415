@@ -23,6 +23,8 @@ namespace WaterResort.Areas.Identity.Pages.Account.Manage
         public static string PersonalData => "PersonalData";
 
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
+        public static string Balance => "Balance";
+        public static string BalanceNavClass(ViewContext viewContext) => PageNavClass(viewContext, Balance);
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 

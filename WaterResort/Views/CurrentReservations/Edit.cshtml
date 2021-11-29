@@ -2,11 +2,27 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Room room = ViewData["Room"] as Room;
 }
+<script>
+    function totalDays() {
+        var start = new Date(document.getElementById("start").value);
+        var end = new Date(document.getElementById("end").value);
+        console.log(start);
+        console.log(end);
+        var totalDays = (end.getTime() - start.getTime()) / (1000 * 3600 * 24);
+        console.log("Total Days: " + totalDays)
+        var costPerNight = @room.CostPerNight;
+        console.log("Cost Per Night: " + costPerNight)
+        var totalCost = totalDays * costPerNight;
+        console.log("Total Cost: " + totalCost)
+        document.getElementById("totalCost").value = totalCost;
+    }
+</script>
 
 <h1>Edit</h1>
 
-<h4>CurrentReservation</h4>
+<h4>Modifty the AccountId, starting date or ending date of the reservation.</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,19 +31,25 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="RoomId" />
             <div class="form-group">
-                <label asp-for="AccountId" class="control-label"></label>
+                <label asp-for="AccountId" class="control-label">Customer AccountId</label>
                 <input asp-for="AccountId" class="form-control" />
                 <span asp-validation-for="AccountId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
+                <label asp-for="StartDate" class="control-label">Starting Date</label>
+                <input id="start" asp-for="StartDate" class="form-control" type="date" onchange="totalDays()"/>
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
+                <label asp-for="EndDate" class="control-label">Ending Date</label>
+                <input id="end" asp-for="EndDate" class="form-control" type="date" onchange="totalDays()"/>
                 <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">
+                    <label>Updated Cost($)</label>
+                    <input id="totalCost" readonly="readonly" asp-for="TotalCost" />
+                </label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
