@@ -74,6 +74,14 @@ namespace WaterResort.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AccountId,StartDate,EndDate,TotalCost,RoomId")] CurrentReservation currentReservation)
         {
+            var room = await _context.Rooms.FirstOrDefaultAsync(m => m.Id == currentReservation.RoomId);
+            if (User.IsInRole("Customer"))
+            {
+                if (room.Reserved == true)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(currentReservation);
@@ -96,7 +104,7 @@ namespace WaterResort.Controllers
                 //Check if the reservation starting date is today
                 if (currentReservation.StartDate == DateTime.Today)
                 {
-                    var room = await _context.Rooms.FirstOrDefaultAsync(m => m.Id == currentReservation.RoomId);
+                    
                     room.Reserved = true;
                     room.AccountId = currentReservation.AccountId;
                 }
@@ -222,6 +230,7 @@ namespace WaterResort.Controllers
             var currentReservation = await _context.CurrentReservations.FindAsync(id);
 
             var room = await _context.Rooms.FirstOrDefaultAsync(m => m.Id == currentReservation.RoomId);
+
             //Update the balance in the accounts receivables
             var AR = await _context.AccountsReceivables.FirstOrDefaultAsync(m =>
                 m.AccountId == currentReservation.AccountId) as AccountsReceivable;
@@ -229,10 +238,11 @@ namespace WaterResort.Controllers
             var totalCost = (decimal)totalDays * room.CostPerNight;
             AR.Balance = AR.Balance - totalCost;
 
-            //Remove reservation status of room if exists
-            if(room.Reserved == true)
+            //Remove reservation status of room and user's accountId if the room is currently reserved
+            if (room.Reserved == true)
             {
                 room.Reserved = false;
+                room.AccountId = null;
             }
 
             _context.CurrentReservations.Remove(currentReservation);
