@@ -20,7 +20,7 @@ namespace WaterResort.Controllers
         {
             _context = context;
         }
-
+        [AllowAnonymous]
         // GET: RestaurantTables
         public async Task<IActionResult> Index()
         {
