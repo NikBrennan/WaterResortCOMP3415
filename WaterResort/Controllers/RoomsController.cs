@@ -223,50 +223,58 @@ namespace WaterResort.Controllers
 
             var room = await _context.Rooms.FirstOrDefaultAsync(m => m.Id == id);
 
-            TempData["RoomNumber"] = room.RoomNumber;
-            TempData["CostPerNight"] = "$" + room.CostPerNight.ToString();
-
-            if(room.LakeFacing == true)
+            if (room != null)
             {
-                TempData["LakeFacing"] = "Yes.";
-            }
+
+                TempData["RoomNumber"] = room.RoomNumber;
+                TempData["CostPerNight"] = "$" + room.CostPerNight.ToString();
+
+                if (room.LakeFacing == true)
+                {
+                    TempData["LakeFacing"] = "Yes.";
+                }
+                else
+                {
+                    TempData["LakeFacing"] = "No.";
+                }
+
+                if (room.QueenBeds == true)
+                {
+                    TempData["Beds"] = "Two queen beds.";
+                }
+                else
+                {
+                    TempData["Beds"] = "One king bed.";
+                }
+
+                if (room.Suite == true)
+                {
+                    TempData["RoomType"] = "Suite";
+                }
+                else
+                {
+                    TempData["RoomType"] = "Standard";
+                }
+                TempData["Id"] = room.Id;
+
+                //This statement can only be ran if an administrator has selected a reserved room
+                if (room.Reserved == true)
+                {
+                    var customerId = room.AccountId;
+                    var customer = await _context.Users.FirstOrDefaultAsync(m => m.Id == customerId);
+                    var currentRes = await _context.CurrentReservations.FirstOrDefaultAsync(m => m.RoomId == room.Id);
+
+                    TempData["PhoneNumber"] = customer.PhoneNumber;
+                    TempData["Email"] = customer.Email;
+                    TempData["ResId"] = currentRes.Id;
+
+                }
+                return RedirectToAction("Index");
+            } 
             else
             {
-                TempData["LakeFacing"] = "No.";
+                return NotFound();
             }
-
-            if(room.QueenBeds == true)
-            {
-                TempData["Beds"] = "Two queen beds.";
-            }
-            else
-            {
-                TempData["Beds"] = "One king bed.";
-            }
-
-            if(room.Suite == true)
-            {
-                TempData["RoomType"] = "Suite";
-            }
-            else
-            {
-                TempData["RoomType"] = "Standard";
-            }
-            TempData["Id"] = room.Id;
-
-            //This statement can only be ran if an administrator has selected a reserved room
-            if(room.Reserved == true)
-            {
-                var customerId = room.AccountId;
-                var customer = await _context.Users.FirstOrDefaultAsync(m => m.Id == customerId);
-                var currentRes = await _context.CurrentReservations.FirstOrDefaultAsync(m => m.RoomId == room.Id);
-
-                TempData["PhoneNumber"] = customer.PhoneNumber;
-                TempData["Email"] = customer.Email;
-                TempData["ResId"] = currentRes.Id;
-
-            }
-            return RedirectToAction("Index");
         }
     }
 }
